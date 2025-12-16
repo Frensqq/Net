@@ -43,7 +43,12 @@ class ShortTestNetworkLibrary {
             RequestRegister(
                 email = "test2${currentTime}@example.com",
                 password = "password123",
-                passwordConfirm = "password123"
+                passwordConfirm = "password123",
+                "tEST",
+                "tEST",
+                "tEST",
+                "tEST",
+                "tEST"
             )
         ).let { result ->
             if (result is NetworkResult.Success) result.data.id else null
@@ -80,7 +85,12 @@ class ShortTestNetworkLibrary {
             val registerRequest = RequestRegister(
                 email = "test${currentTime}@example.com",
                 password = "password123",
-                passwordConfirm = "password123"
+                passwordConfirm = "password123",
+                "tEST",
+                "tEST",
+                "tEST",
+                "tEST",
+                "tEST"
             )
 
             repository.registration(registerRequest)

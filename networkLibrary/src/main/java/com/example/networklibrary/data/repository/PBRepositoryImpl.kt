@@ -96,18 +96,25 @@ class PBRepositoryImpl(private val api: PBApi, private val networkMonitor: Netwo
     override suspend fun descriptionProduct(idProduct: String): NetworkResult<Product> =
         safeApiCall { api.descriptionProduct(idProduct) }
 
-    override suspend fun listProject(): NetworkResult<ResponsesProject> =
-        safeApiCall { api.listProject() }
+    override suspend fun listProject(filter: String?): NetworkResult<ResponsesProject> =
+        safeApiCall { api.listProject(filter) }
 
     override suspend fun createProject(request: RequestProject): NetworkResult<Project> =
         safeApiCall { api.createProject(request) }
 
+    override suspend fun listBucket(filter: String?): NetworkResult<ResponsesCart> =
+        safeApiCall { api.listCart(filter) }
     override suspend fun createBucket(request: RequestCart): NetworkResult<ResponseCart> =
         safeApiCall { api.createBucket(request) }
+
+    override suspend fun deleteBucket(id: String): NetworkResult<Unit> =
+        safeApiCall { api.deleteBucket(id) }
 
     override suspend fun redactBucket(idBucket: String, request: RequestCart): NetworkResult<ResponseCart> =
         safeApiCall { api.redactBucket(idBucket, request) }
 
+    override suspend fun listOrders(filter: String?): NetworkResult<ResponsesOrders> =
+        safeApiCall { api.listOrders(filter) }
     override suspend fun createOrder(request: RequestOrder): NetworkResult<ResponseOrder> =
         safeApiCall { api.createOrder(request) }
 

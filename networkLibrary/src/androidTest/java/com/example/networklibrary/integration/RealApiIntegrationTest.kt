@@ -46,7 +46,12 @@ class PocketBaseCRUDTest {
             RequestRegister(
                 email = email,
                 password = "password123",
-                passwordConfirm = "password123"
+                passwordConfirm = "password123",
+                "tEST",
+                "tEST",
+                "tEST",
+                "tEST",
+                "tEST"
             )
         )
         return@runBlocking if (registerResult is NetworkResult.Success) {
@@ -80,7 +85,12 @@ class PocketBaseCRUDTest {
         val registerRequest = RequestRegister(
             email = "test${currentTime}@example.com",
             password = "password123",
-            passwordConfirm = "password123"
+            passwordConfirm = "password123",
+            "tEST",
+            "tEST",
+            "tEST",
+            "tEST",
+            "tEST"
         )
 
         val registerResult = repository.registration(registerRequest)

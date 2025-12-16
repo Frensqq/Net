@@ -15,4 +15,8 @@ object PBApiServis {
             .build()
         retrofit.create(PBApi::class.java)
     }
+
+    fun getImageUrl(collectionId: String, recordId: String, fileName: String): String {
+        return "$BASE_URL"+"files/$collectionId/$recordId/$fileName"
+    }
 }

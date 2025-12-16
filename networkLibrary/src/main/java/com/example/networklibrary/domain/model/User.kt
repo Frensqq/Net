@@ -12,5 +12,7 @@ data class User(
     val updated:String,
     val verified:Boolean,
     val datebirthday: String,
-    val gender: String
+    val gender: String,
+    val email: String
+
 )

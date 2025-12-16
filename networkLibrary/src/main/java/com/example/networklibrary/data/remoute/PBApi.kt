@@ -13,7 +13,9 @@ import com.example.networklibrary.domain.model.ResponseCart
 import com.example.networklibrary.domain.model.ResponseOrder
 import com.example.networklibrary.domain.model.ResponseProducts
 import com.example.networklibrary.domain.model.ResponseRegister
+import com.example.networklibrary.domain.model.ResponsesCart
 import com.example.networklibrary.domain.model.ResponsesNews
+import com.example.networklibrary.domain.model.ResponsesOrders
 import com.example.networklibrary.domain.model.ResponsesProject
 import com.example.networklibrary.domain.model.User
 import com.example.networklibrary.domain.model.UserAuth
@@ -60,25 +62,33 @@ interface PBApi {
 
     //project Действия с проектами
     @GET("collections/project/records")
-    suspend fun listProject(): ResponsesProject
+    suspend fun listProject(@Query("filter") filter: String? = null): ResponsesProject
 
     @POST("collections/project/records")
     suspend fun createProject(@Body request: RequestProject): Project
 
     //backet Действия с корзиной
+
+    @GET("collections/cart/records")
+    suspend fun listCart(@Query("filter") filter: String? = null): ResponsesCart
     @POST("collections/cart/records")
     suspend fun createBucket(@Body request: RequestCart): ResponseCart
+
+    @DELETE("collections/cart/records/{id}")
+    suspend fun deleteBucket(@Path("id") id: String): Unit
 
     @PATCH("collections/cart/records/{id_bucket}")
     suspend fun redactBucket(@Path("id_bucket") id_bucket: String, @Body request: RequestCart): ResponseCart
 
     //order Действия с заказом
+
+    @GET("collections/cart/records")
+    suspend fun listOrders(@Query("filter") filter: String? = null): ResponsesOrders
     @POST("collections/orders/records")
     suspend fun createOrder(@Body request: RequestOrder): ResponseOrder
 
     //выход
     @DELETE("collections/_authOrigins/records/{id_token}")
     suspend fun logout(@Header("Authorization") token: String, @Path("id_token") id_token: String): Unit
-
 
 }

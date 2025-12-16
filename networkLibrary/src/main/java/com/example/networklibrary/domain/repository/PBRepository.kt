@@ -20,14 +20,19 @@ interface PBRepository {
     suspend fun descriptionProduct(idProduct: String): NetworkResult<Product>
 
     // Project actions
-    suspend fun listProject(): NetworkResult<ResponsesProject>
+    suspend fun listProject(filter: String? = null): NetworkResult<ResponsesProject>
     suspend fun createProject(request: RequestProject): NetworkResult<Project>
 
     // Cart actions
+
+    suspend fun listBucket(filter: String? = null): NetworkResult<ResponsesCart>
     suspend fun createBucket(request: RequestCart): NetworkResult<ResponseCart>
+
+    suspend fun deleteBucket(id: String): NetworkResult<Unit>
     suspend fun redactBucket(idBucket: String, request: RequestCart): NetworkResult<ResponseCart>
 
     // Order actions
+    suspend fun listOrders(filter: String? = null): NetworkResult<ResponsesOrders>
     suspend fun createOrder(request: RequestOrder): NetworkResult<ResponseOrder>
 
     // Выход
