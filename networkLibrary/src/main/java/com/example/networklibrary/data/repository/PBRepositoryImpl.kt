@@ -1,15 +1,22 @@
 package com.example.networklibrary.data.repository
 
+import android.content.Context
+import android.net.Uri
+import androidx.core.net.toFile
 import com.example.networklibrary.data.remote.PBApi
 import com.example.networklibrary.domain.model.*
 import com.example.networklibrary.domain.repository.PBRepository
 import com.example.networklibrary.network.monitor.NetworkMonitor
 import com.google.gson.Gson
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.HttpException
+import java.io.File
 import java.io.IOException
 import java.net.SocketTimeoutException
 
-class PBRepositoryImpl(private val api: PBApi, private val networkMonitor: NetworkMonitor) : PBRepository {
+class PBRepositoryImpl(private val api: PBApi, private val networkMonitor: NetworkMonitor, private val context: Context ) : PBRepository {
 
     private val gson = Gson()
 
@@ -120,4 +127,51 @@ class PBRepositoryImpl(private val api: PBApi, private val networkMonitor: Netwo
 
     override suspend fun logout(token:String, idToken: String): NetworkResult<Unit> =
         safeApiCall { api.logout(token, idToken) }
+
+
+    override suspend fun createProjectWithImage(request: RequestProjectImage): NetworkResult<Project> =
+        safeApiCall {
+            // Подготавливаем поля как Map<String, String>
+            val fields = mapOf(
+                "title" to request.title,
+                "typeProject" to request.typeProject,
+                "user_id" to request.user_id,
+                "dateStart" to request.dateStart,
+                "dateEnd" to request.dateEnd,
+                "gender" to request.gender,
+                "description_source" to request.description_source,
+                "category" to request.category
+            )
+
+            // Если есть изображение - добавляем его
+            val imagePart = request.imageUri?.let { uri ->
+                val file = uri.toFile(context)
+                val requestBody = file.asRequestBody("image/*".toMediaType())
+                MultipartBody.Part.createFormData(
+                    "image",
+                    request.imageFileName.ifEmpty { file.name },
+                    requestBody
+                )
+            }
+
+            api.createProjectWithImage(
+                image = imagePart,
+                fields = fields
+            )
+        }
+}
+
+private fun Uri.toFile(context: Context): File {
+    val inputStream = context.contentResolver.openInputStream(this)
+        ?: throw IOException("Cannot open file")
+
+    val file = File(context.cacheDir, "project_image_${System.currentTimeMillis()}.jpg")
+
+    inputStream.use { input ->
+        file.outputStream().use { output ->
+            input.copyTo(output)
+        }
+    }
+
+    return file
 }

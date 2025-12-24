@@ -20,12 +20,16 @@ import com.example.networklibrary.domain.model.ResponsesProject
 import com.example.networklibrary.domain.model.User
 import com.example.networklibrary.domain.model.UserAuth
 import com.example.networklibrary.domain.model.UsersAuth
+import okhttp3.MultipartBody
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.Multipart
 import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.Part
+import retrofit2.http.PartMap
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -82,7 +86,7 @@ interface PBApi {
 
     //order Действия с заказом
 
-    @GET("collections/cart/records")
+    @GET("collections/orders/records")
     suspend fun listOrders(@Query("filter") filter: String? = null): ResponsesOrders
     @POST("collections/orders/records")
     suspend fun createOrder(@Body request: RequestOrder): ResponseOrder
@@ -91,4 +95,11 @@ interface PBApi {
     @DELETE("collections/_authOrigins/records/{id_token}")
     suspend fun logout(@Header("Authorization") token: String, @Path("id_token") id_token: String): Unit
 
+    // тест с добовлением картинки
+    @Multipart
+    @POST("collections/project/records")
+    suspend fun createProjectWithImage(
+        @Part image: MultipartBody.Part? = null,
+        @PartMap fields: Map<String, String>
+    ): Project
 }
