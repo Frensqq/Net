@@ -8,6 +8,7 @@ import com.example.networklibrary.domain.model.*
 import com.example.networklibrary.domain.repository.PBRepository
 import com.example.networklibrary.network.monitor.NetworkMonitor
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -21,7 +22,6 @@ class PBRepositoryImpl(private val api: PBApi, private val networkMonitor: Netwo
     private val gson = Gson()
 
     private suspend fun <T> safeApiCall(apiCall: suspend () -> T): NetworkResult<T> {
-
         if (!networkMonitor.isConnected()) {
             return NetworkResult.NoInternet
         }
@@ -35,36 +35,21 @@ class PBRepositoryImpl(private val api: PBApi, private val networkMonitor: Netwo
                     val errorCode = e.code()
                     val errorBody = e.response()?.errorBody()?.string() ?: "Unknown error"
 
-                    // Специальная обработка для ошибки 400
-                    if (errorCode == 400) {
-                        try {
-                            // Парсим ошибку в ваш существующий Error400
-                            val error400 = gson.fromJson(errorBody, Error400::class.java)
-                            NetworkResult.Error(
-                                ApiError(
-                                    code = errorCode,
-                                    message = "Bad Request",
-                                    error400 = error400
-                                )
-                            )
-                        } catch (parseException: Exception) {
-                            // Если не удалось распарсить как Error400
-                            NetworkResult.Error(
-                                ApiError(
-                                    code = errorCode,
-                                    message = errorBody
-                                )
-                            )
-                        }
-                    } else {
-                        // Для других HTTP ошибок
-                        NetworkResult.Error(
-                            ApiError(
-                                code = errorCode,
-                                message = errorBody
-                            )
-                        )
+                    // Универсальная обработка ошибок
+                    val errorDetails = try {
+                        val type = object : TypeToken<Map<String, Any>>() {}.type
+                        gson.fromJson<Map<String, Any>>(errorBody, type) ?: emptyMap()
+                    } catch (ex: Exception) {
+                        mapOf("raw" to errorBody)
                     }
+
+                    NetworkResult.Error(
+                        ApiError(
+                            code = errorCode,
+                            message = "HTTP Error: $errorCode",
+                            details = errorDetails
+                        )
+                    )
                 }
                 is SocketTimeoutException -> NetworkResult.Error(
                     ApiError(code = 408, message = "Request timeout")

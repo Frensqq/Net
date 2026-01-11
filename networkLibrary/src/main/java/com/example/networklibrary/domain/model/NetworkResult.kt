@@ -15,6 +15,5 @@ sealed class NetworkResult<out T> {
 data class ApiError(
     val code: Int,
     val message: String,
-    val error400: Error400? = null, // Используем ваш существующий класс
-    val details: Map<String, String> = emptyMap()
+    val details: Map<String, Any> = emptyMap()
 )

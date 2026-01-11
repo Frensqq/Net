@@ -35,15 +35,15 @@ import retrofit2.http.Query
 
 interface PBApi {
 
-    //user Действия с пользователем
+    // User actions
     @POST("collections/users/records")
     suspend fun registration(@Body request: RequestRegister): ResponseRegister
 
-    @GET("collections/users/records/{id_user}")
-    suspend fun viewUser(@Path("id_user") id_user: String): User
+    @GET("collections/users/records/{id}")
+    suspend fun viewUser(@Path("id") id: String): User
 
-    @PATCH("collections/users/records/{id_user}")
-    suspend fun redactProfile(@Path("id_user") id_user: String, @Body request: RequestUser): User
+    @PATCH("collections/users/records/{id}")
+    suspend fun redactProfile(@Path("id") id: String, @Body request: RequestUser): User
 
     @POST("collections/users/auth-with-password")
     suspend fun authorizationUser(@Body request: RequestAuth): ResponseAuth
@@ -51,55 +51,55 @@ interface PBApi {
     @GET("collections/_authOrigins/records")
     suspend fun returnIdToken(@Header("Authorization") token: String): UsersAuth
 
-    @DELETE("collections/users/records/{id_token}")
-    suspend fun deleteUser(@Path("id_token") id_token: String): Unit
+    @DELETE("collections/users/records/{id}")
+    suspend fun deleteUser(@Path("id") id: String): Unit
 
-    //shop Действия с магазином
+    // Shop actions
     @GET("collections/news/records")
     suspend fun promoAndNews(): ResponsesNews
 
     @GET("collections/products/records")
     suspend fun listProduct(@Query("filter") filter: String? = null): ResponseProducts
 
-    @GET("collections/products/records/{id_product}")
-    suspend fun descriptionProduct(@Path("id_product") id_product: String): Product
+    @GET("collections/products/records/{id}")
+    suspend fun descriptionProduct(@Path("id") id: String): Product
 
-    //project Действия с проектами
+    // Project actions
     @GET("collections/project/records")
     suspend fun listProject(@Query("filter") filter: String? = null): ResponsesProject
 
     @POST("collections/project/records")
     suspend fun createProject(@Body request: RequestProject): Project
 
-    //backet Действия с корзиной
-
+    // Cart actions
     @GET("collections/cart/records")
     suspend fun listCart(@Query("filter") filter: String? = null): ResponsesCart
+
     @POST("collections/cart/records")
     suspend fun createBucket(@Body request: RequestCart): ResponseCart
 
     @DELETE("collections/cart/records/{id}")
     suspend fun deleteBucket(@Path("id") id: String): Unit
 
-    @PATCH("collections/cart/records/{id_bucket}")
-    suspend fun redactBucket(@Path("id_bucket") id_bucket: String, @Body request: RequestCart): ResponseCart
+    @PATCH("collections/cart/records/{id}")
+    suspend fun redactBucket(@Path("id") id: String, @Body request: RequestCart): ResponseCart
 
-    //order Действия с заказом
-
+    // Order actions
     @GET("collections/orders/records")
     suspend fun listOrders(@Query("filter") filter: String? = null): ResponsesOrders
+
     @POST("collections/orders/records")
     suspend fun createOrder(@Body request: RequestOrder): ResponseOrder
 
-    //выход
-    @DELETE("collections/_authOrigins/records/{id_token}")
-    suspend fun logout(@Header("Authorization") token: String, @Path("id_token") id_token: String): Unit
+    // Logout
+    @DELETE("collections/_authOrigins/records/{id}")
+    suspend fun logout(@Header("Authorization") token: String, @Path("id") id: String): Unit
 
-    // тест с добовлением картинки
+    // Upload with image
     @Multipart
     @POST("collections/project/records")
     suspend fun createProjectWithImage(
         @Part image: MultipartBody.Part? = null,
-        @PartMap fields: Map<String, String>
+        @PartMap fields: Map<String, @JvmSuppressWildcards String>
     ): Project
 }
