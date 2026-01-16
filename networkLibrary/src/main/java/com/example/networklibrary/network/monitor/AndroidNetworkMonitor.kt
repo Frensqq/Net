@@ -1,6 +1,5 @@
 package com.example.networklibrary.network.monitor
 
-
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
