@@ -2,9 +2,6 @@ package com.example.networklibrary.domain.repository
 
 import com.example.networklibrary.domain.model.*
 
-/**
- * Абстракция для сетевого слоя - позволяет заменить реализацию без изменения бизнес-логики
- */
 interface PBRepository {
     // User actions
     suspend fun registration(request: RequestRegister): NetworkResult<ResponseRegister>
@@ -38,8 +35,5 @@ interface PBRepository {
     // Выход
     suspend fun logout(token: String, itToken: String): NetworkResult<Unit>
 
-    suspend fun createProjectWithImage(
-        request: RequestProjectImage
-    ): NetworkResult<Project>
-
+    suspend fun createProjectWithImage(request: RequestProjectImage): NetworkResult<Project>
 }
