@@ -1,28 +1,16 @@
 package com.example.networklibrary
 
-
-
-import android.content.Context
 import com.example.networklibrary.data.remote.PBApi
-import com.example.networklibrary.data.remote.PBApiServis
-import com.example.networklibrary.data.repository.PBRepositoryImpl
 import com.example.networklibrary.domain.model.*
-import com.example.networklibrary.network.monitor.NetworkMonitor
 import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
-import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.Mockito
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
-import okhttp3.Request
 
-class PBRealTests {
+class PBRepositoryUnitTest {
 
-    // Используем 127.0.0.1 вместо 10.0.2.2
     private val retrofit = Retrofit.Builder()
         .baseUrl("http://127.0.0.1:8090/api/")
         .addConverterFactory(GsonConverterFactory.create())
@@ -33,19 +21,14 @@ class PBRealTests {
         .build()
 
     private val api = retrofit.create(PBApi::class.java)
+    val email = "test${System.currentTimeMillis()}@example.com"
+
 
     @Test
-    fun test1_Authorization() {
+    fun CreateProfile() {
         runBlocking {
-            api.authorizationUser(RequestAuth("test@example.com", "password123"))
-        }
-    }
 
-    @Test
-    fun test2_CreateProfile() {
-        runBlocking {
-            val email = "test${System.currentTimeMillis()}@example.com"
-            api.registration(RequestRegister(
+            user = api.registration(RequestRegister(
                 email = email,
                 password = "password123",
                 passwordConfirm = "password123",
@@ -59,29 +42,34 @@ class PBRealTests {
     }
 
     @Test
-    fun test3_GetPromotions() {
+    fun Authorization() {
+        runBlocking {
+            api.authorizationUser(RequestAuth(email, "password123"))
+        }
+    }
+    @Test
+    fun GetPromotions() {
         runBlocking {
             api.promoAndNews()
         }
     }
 
     @Test
-    fun test4_GetCatalog() {
+    fun GetCatalog() {
         runBlocking {
             val response = api.listProduct()
-            println("Получено ${response.items.size} продуктов")
         }
     }
 
     @Test
-    fun test5_Search() {
+    fun Search() {
         runBlocking {
             api.listProduct("title~'nike'")
         }
     }
 
     @Test
-    fun test6_GetProductDescription() {
+    fun GetProductDescription() {
         runBlocking {
             val products = api.listProduct()
             if (products.items.isNotEmpty()) {
@@ -91,44 +79,43 @@ class PBRealTests {
     }
 
     @Test
-    fun test7_AddToCart() {
+    fun AddToCart() {
         runBlocking {
-            // Нужен существующий пользователь и продукт
             val products = api.listProduct()
             if (products.items.isNotEmpty()) {
-                api.createBucket(RequestCart("user_id", products.items[0].id, 1))
+                api.createBucket(RequestCart("", products.items[0].id, 1))
             }
         }
     }
 
     @Test
-    fun test8_UpdateCart() {
+    fun UpdateCart() {
         runBlocking {
-            api.redactBucket("cart_id", RequestCart("user_id", "product_id", 2))
+            api.redactBucket("", RequestCart("", "", 2))
         }
     }
 
     @Test
-    fun test9_CreateOrder() {
+    fun CreateOrder() {
         runBlocking {
-            api.createOrder(RequestOrder("user_id", "product_id", 1))
+            api.createOrder(RequestOrder("", "", 1))
         }
     }
 
     @Test
-    fun test10_GetProjects() {
+    fun GetProjects() {
         runBlocking {
             api.listProject()
         }
     }
 
     @Test
-    fun test11_CreateProject() {
+    fun CreateProject() {
         runBlocking {
             api.createProject(RequestProject(
                 title = "Тестовый проект ${System.currentTimeMillis()}",
                 typeProject = "web",
-                user_id = "test_user_id",
+                user_id = "",
                 dateStart = "2024-01-01",
                 dateEnd = "2024-12-31",
                 gender = "male",
@@ -139,14 +126,14 @@ class PBRealTests {
     }
 
     @Test
-    fun test12_GetUserProfile() {
+    fun GetUserProfile() {
         runBlocking {
-            api.viewUser("test_user_id")
+            api.viewUser("")
         }
     }
 
     @Test
-    fun test13_Logout() {
+    fun Logout() {
         runBlocking {
             api.logout("Bearer token123", "auth_id_123")
         }

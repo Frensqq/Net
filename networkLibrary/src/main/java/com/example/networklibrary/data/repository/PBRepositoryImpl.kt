@@ -116,7 +116,7 @@ class PBRepositoryImpl(private val api: PBApi, private val networkMonitor: Netwo
 
     override suspend fun createProjectWithImage(request: RequestProjectImage): NetworkResult<Project> =
         safeApiCall {
-            // Подготавливаем поля как Map<String, String>
+
             val fields = mapOf(
                 "title" to request.title,
                 "typeProject" to request.typeProject,
@@ -128,7 +128,6 @@ class PBRepositoryImpl(private val api: PBApi, private val networkMonitor: Netwo
                 "category" to request.category
             )
 
-            // Если есть изображение - добавляем его
             val imagePart = request.imageUri?.let { uri ->
                 val file = uri.toFile(context)
                 val requestBody = file.asRequestBody("image/*".toMediaType())
@@ -150,7 +149,7 @@ private fun Uri.toFile(context: Context): File {
     val inputStream = context.contentResolver.openInputStream(this)
         ?: throw IOException("Cannot open file")
 
-    val file = File(context.cacheDir, "project_image_${System.currentTimeMillis()}.jpg")
+    val file = File(context.cacheDir, "image${System.currentTimeMillis()}.jpg")
 
     inputStream.use { input ->
         file.outputStream().use { output ->
