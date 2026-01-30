@@ -110,9 +110,13 @@ class PBRepositoryImpl(private val api: PBApi, private val networkMonitor: Netwo
     override suspend fun createOrder(request: RequestOrder): NetworkResult<ResponseOrder> =
         safeApiCall { api.createOrder(request) }
 
-    override suspend fun logout(token:String, idToken: String): NetworkResult<Unit> =
-        safeApiCall { api.logout(token, idToken) }
+//    override suspend fun logout(token:String, idToken: String): NetworkResult<Unit> =
+//        safeApiCall { api.logout(token, idToken) }
 
+    override suspend fun logout(token:String, idToken: String): NetworkResult<Unit> =
+        safeApiCall {
+            api.logout(token,idToken )
+        }
 
     override suspend fun createProjectWithImage(request: RequestProjectImage): NetworkResult<Project> =
         safeApiCall {

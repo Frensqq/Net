@@ -93,7 +93,7 @@ interface PBApi {
 
     // Logout
     @DELETE("collections/_authOrigins/records/{id}")
-    suspend fun logout(@Header("Authorization") token: String, @Path("id") id: String): Unit
+    suspend fun logout(@Header("Authorization") token: String, @Path("id") id: String): okhttp3.ResponseBody
 
     // Upload with image
     @Multipart
