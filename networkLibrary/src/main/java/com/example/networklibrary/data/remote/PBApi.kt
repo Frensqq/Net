@@ -1,5 +1,8 @@
 package com.example.networklibrary.data.remote
 
+import com.example.networklibrary.domain.model.NetworkResult
+import com.example.networklibrary.domain.model.OTPRequest
+import com.example.networklibrary.domain.model.OTPResponses
 import com.example.networklibrary.domain.model.Product
 import com.example.networklibrary.domain.model.Project
 import com.example.networklibrary.domain.model.RequestAuth
@@ -93,7 +96,16 @@ interface PBApi {
 
     // Logout
     @DELETE("collections/_authOrigins/records/{id}")
-    suspend fun logout(@Header("Authorization") token: String, @Path("id") id: String): okhttp3.ResponseBody
+    suspend fun logout(@Header("Authorization") token: String, @Path("id") id: String): Unit
+
+    //OTP code
+    @POST("/api/collections/users/request-otp")
+    suspend fun OTPRequest(@Body email: String): String
+
+    @POST("/api/collections/users/auth-with-otp")
+    suspend fun OTPAuth(@Body request: OTPRequest): OTPResponses
+
+
 
     // Upload with image
     @Multipart

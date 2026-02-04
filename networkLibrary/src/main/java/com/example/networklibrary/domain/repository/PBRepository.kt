@@ -36,4 +36,9 @@ interface PBRepository {
     suspend fun logout(token: String, itToken: String):  NetworkResult<Unit>
 
     suspend fun createProjectWithImage(request: RequestProjectImage): NetworkResult<Project>
+
+    //OTP
+    suspend fun OTPRequest(request: String): NetworkResult<String>
+
+    suspend fun OTPAuth(request: OTPRequest): NetworkResult<OTPResponses>
 }

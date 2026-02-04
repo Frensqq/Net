@@ -9,18 +9,12 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-
-
-
 class PBRepositoryUnitTest {
 
     private val retrofit = Retrofit.Builder()
         .baseUrl("http://127.0.0.1:8090/api/")
         .addConverterFactory(GsonConverterFactory.create())
-        .client(OkHttpClient.Builder()
-            .connectTimeout(10, TimeUnit.SECONDS)
-            .readTimeout(10, TimeUnit.SECONDS)
-            .build())
+        .client(OkHttpClient.Builder().build())
         .build()
 
     private val api = retrofit.create(PBApi::class.java)
@@ -47,9 +41,9 @@ class PBRepositoryUnitTest {
 
     private val token = auth()
 
-    private fun searchLogoutId(): String = runBlocking {
-        api.returnIdToken(token).items.first { it.recordRef == userId }.id
-    }
+//    private fun searchLogoutId(): String = runBlocking {
+//        api.returnIdToken(token).items.first { it.recordRef == userId }.id
+//    }
 
     private fun getProductId(): String = runBlocking {
         api.listProduct().items.first().id

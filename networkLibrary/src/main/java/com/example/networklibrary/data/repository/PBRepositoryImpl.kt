@@ -2,6 +2,7 @@ package com.example.networklibrary.data.repository
 
 import android.content.Context
 import android.net.Uri
+import android.view.PixelCopy.request
 import androidx.core.net.toFile
 import com.example.networklibrary.data.remote.PBApi
 import com.example.networklibrary.domain.model.*
@@ -114,9 +115,13 @@ class PBRepositoryImpl(private val api: PBApi, private val networkMonitor: Netwo
 //        safeApiCall { api.logout(token, idToken) }
 
     override suspend fun logout(token:String, idToken: String): NetworkResult<Unit> =
-        safeApiCall {
-            api.logout(token,idToken )
-        }
+        safeApiCall { api.logout(token,idToken ) }
+
+    override suspend fun OTPAuth(request: OTPRequest): NetworkResult<OTPResponses> =
+        safeApiCall{api.OTPAuth(request)}
+
+    override suspend fun OTPRequest(request: String): NetworkResult<String> =
+        safeApiCall { api.OTPRequest(request) }
 
     override suspend fun createProjectWithImage(request: RequestProjectImage): NetworkResult<Project> =
         safeApiCall {
