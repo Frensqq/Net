@@ -7,7 +7,6 @@ import okhttp3.OkHttpClient
 import org.junit.Test
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
 
 class PBRepositoryUnitTest {
 

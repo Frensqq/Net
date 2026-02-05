@@ -1,8 +1,5 @@
 package com.example.networklibrary.domain.model
 
-import android.provider.ContactsContract
-import androidx.transition.Visibility
-
 data class RequestUser(
     val email: String,
     val emailVisibility: Boolean,

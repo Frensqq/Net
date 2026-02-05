@@ -1,6 +1,5 @@
 package com.example.networklibrary.data.remote
 
-import com.example.networklibrary.domain.model.NetworkResult
 import com.example.networklibrary.domain.model.OTPRequest
 import com.example.networklibrary.domain.model.OTPResponses
 import com.example.networklibrary.domain.model.Product
@@ -21,7 +20,6 @@ import com.example.networklibrary.domain.model.ResponsesNews
 import com.example.networklibrary.domain.model.ResponsesOrders
 import com.example.networklibrary.domain.model.ResponsesProject
 import com.example.networklibrary.domain.model.User
-import com.example.networklibrary.domain.model.UserAuth
 import com.example.networklibrary.domain.model.UsersAuth
 import okhttp3.MultipartBody
 import retrofit2.http.Body
@@ -104,8 +102,6 @@ interface PBApi {
 
     @POST("/api/collections/users/auth-with-otp")
     suspend fun OTPAuth(@Body request: OTPRequest): OTPResponses
-
-
 
     // Upload with image
     @Multipart

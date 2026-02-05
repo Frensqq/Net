@@ -14,6 +14,5 @@ val gender: String,
 val description_source: String,
 val category: String,
 val imageUri: Uri? = null,
-val imageFileName: String = ""
 
 )
